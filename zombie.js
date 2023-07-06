@@ -30,6 +30,14 @@ update() {
     this.zombie.position.set(this.zombie.position.x + direction.x, this.zombie.position.y + direction.y);
 }
 
+kill(){
+this.app.stage.removeChild(this.zombie);
+}
+
+get position() {
+  return this.zombie.position;
+}
+
 spawnPoint() {
     let fourCorners = Math.floor(Math.random() * 4);
     let spawn = new Victor(0, 0);

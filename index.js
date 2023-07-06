@@ -19,4 +19,19 @@ let zombieSpawn = new Spawn({create: () => new Zombie({app, player})});
 app.ticker.add((delta) => {
     player.update();
     zombieSpawn.spawnArr.forEach((zombie) => zombie.update()); 
+    bulletTest({bullets: player.defense.bullets, zombies: zombieSpawn.spawnArr, bulletRadius: 8, zombieRadius: 16});
 });
+
+function bulletTest({bullets, zombies, bulletRadius, zombieRadius}) {
+  bullets.forEach(bullet => {
+    zombies.forEach((zombie, index) => {
+      let diff_x = zombie.position.x - bullet.position.x;
+      let diff_y = zombie.position.y - bullet.position.y;
+      let dist = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+      if (dist < bulletRadius + zombieRadius) {
+        zombies.splice(index, 1)
+        zombie.kill();
+      }
+    })
+  })
+}
