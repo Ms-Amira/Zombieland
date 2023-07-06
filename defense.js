@@ -39,9 +39,8 @@ set shooting(shot) {
         clearInterval(this.interval);
     }
 }
-update() {
-    this.bullets.forEach((b) => b.position.set(b.position.x + b.velocity.x, b.position.y + b.velocity.y) 
-        
+update(delta) {
+    this.bullets.forEach((b) => b.position.set(b.position.x + b.velocity.x * delta, b.position.y + b.velocity.y * delta)      
     );
 }
 }

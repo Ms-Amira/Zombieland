@@ -17,21 +17,27 @@ constructor({app, player}) {
     app.stage.addChild(this.zombie)   
 }
 
-update() {
+attackPlayer(){
+if (this.attacking) return;
+this.attacking = true;
+this.interval = setInterval(() => this.player.attack(), 500);
+}
+
+update(delta) {
     let z = new Victor(this.zombie.position.x, this.zombie.position.y);
     let p = new Victor(this.player.position.x, this.player.position.y);
     if (z.distance(p) < this.player.width / 2) {
-      let rando = this.spawnPoint();
-      this.zombie.position.set(rando.x, rando.y);
+      this.attackPlayer();
       return;
     }
     let location = p.subtract(z);
-    let direction = location.normalize().multiplyScalar(this.speed);
+    let direction = location.normalize().multiplyScalar(this.speed * delta);
     this.zombie.position.set(this.zombie.position.x + direction.x, this.zombie.position.y + direction.y);
 }
 
 kill(){
 this.app.stage.removeChild(this.zombie);
+clearInterval(this.interval);
 }
 
 get position() {

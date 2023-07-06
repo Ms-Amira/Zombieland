@@ -12,8 +12,29 @@ this.player.width = this.player.height = playerWidth;
 this.player.tint = 0xea985d;
 
 app.stage.addChild(this.player);
+
 this.lastClickButton = 0;
-this.defense = new Defense({app, player:this})
+this.defense = new Defense({app, player:this});
+const margin = 16;
+const barHeight = 8;
+this.maxHealth = 100;
+this.health = this.maxHealth;
+this.healthBar = new PIXI.Graphics();
+this.healthBar.beginFill(0xff0000);
+this.healthBar.initialWidth = app.screen.width - 2 * margin;
+this.healthBar.drawRect(margin, app.screen.height - barHeight - margin / 2, this.healthBar.initialWidth, barHeight);
+this.healthBar.endFill();
+this.healthBar.zIndex = 1;
+this.app.stage.sortableChildren = true;
+this.app.stage.addChild(this.healthBar);
+    }
+
+    attack() {
+        this.health -= 1;
+        this.healthBar.width = (this.health / this.maxHealth) * this.healthBar.initialWidth;
+        if(this.health <= 0) {
+            this.dead = true;
+        }
     }
 
     get position() {
@@ -24,7 +45,8 @@ this.defense = new Defense({app, player:this})
         return this.player.width;
     }
 
-    update() {
+    update(delta) {
+        if (this.dead) return;
         const click = this.app.renderer.plugins.interaction.mouse;
         const pointCursor = click.global;
         let movement = Math.atan2(pointCursor.y - this.player.position.y, pointCursor.x - this.player.position.x
@@ -36,6 +58,6 @@ this.defense = new Defense({app, player:this})
             this.defense.shooting = click.buttons !== 0;
             this.lastClickButton = click.buttons;
         }
-        this.defense.update();
+        this.defense.update(delta);
     }
 }
