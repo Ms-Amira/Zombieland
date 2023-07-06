@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import Defense from "./defense";
 
 export default class Player {
     constructor({app}) {
@@ -11,6 +12,8 @@ this.player.width = this.player.height = playerWidth;
 this.player.tint = 0xea985d;
 
 app.stage.addChild(this.player);
+this.lastClickButton = 0;
+this.defense = new Defense({app, player:this})
     }
 
     get position() {
@@ -22,11 +25,17 @@ app.stage.addChild(this.player);
     }
 
     update() {
-        const pointCursor = this.app.renderer.plugins.interaction.mouse.global;
-    let movement = Math.atan2(pointCursor.y - this.player.position.y, pointCursor.x - this.player.position.x
+        const click = this.app.renderer.plugins.interaction.mouse;
+        const pointCursor = click.global;
+        let movement = Math.atan2(pointCursor.y - this.player.position.y, pointCursor.x - this.player.position.x
         ) +
-        Math.PI / 2;
+            Math.PI / 2;
         this.player.rotation = movement;
 
+        if (click.buttons !== this.lastClickButton) {
+            this.defense.shooting = click.buttons !== 0;
+            this.lastClickButton = click.buttons;
+        }
+        this.defense.update();
     }
 }
