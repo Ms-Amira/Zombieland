@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import Player from "./player.js";
 import Zombie from "./zombie.js";
 import Spawn from "./spawn.js";
+import { zombies } from "./globals.js";
 //import Matter from "matter-js";
 
 const canvasSize = 256;
@@ -13,7 +14,14 @@ const app = new PIXI.Application({
   backgroundColor: 0x5c812f
 });
 
-let player = new Player({app});
+initGame();
+
+async function initGame() {
+  console.log('Loading...')
+  try {
+    await loadAssets();
+    console.log('Loaded')
+    let player = new Player({app});
 let zombieSpawn = new Spawn({app, create: () => new Zombie({app, player})});
 
 let pressPlay = createScene('Click to Start');
@@ -28,6 +36,11 @@ app.ticker.add((delta) => {
     zombieSpawn.spawnArr.forEach((zombie) => zombie.update(delta)); 
     bulletTest({bullets: player.defense.bullets, zombies: zombieSpawn.spawnArr, bulletRadius: 8, zombieRadius: 16});
 });
+  } catch(error) {
+console.log(error.message)
+console.log('Load failed')
+  }
+}
 
 function bulletTest({bullets, zombies, bulletRadius, zombieRadius}) {
   bullets.forEach(bullet => {
@@ -55,8 +68,20 @@ function createScene(sceneText) {
   return scene;
 }
 
+
 function startGame() {
   app.gameStarted = true;
+}
+
+async function loadAssets() {
+  return new Promise ((resolve, reject) => {
+    zombies.forEach(z => PIXI.Loader.shared.add(`assets/${z}.json`));
+    PIXI.Loader.shared.add('assets/hero_male.json');
+    PIXI.Loader.shared.add('bullet', 'assets/bullet.png');
+    PIXI.Loader.shared.onComplete.add(resolve);
+    PIXI.Loader.shared.onError.add(reject);
+    PIXI.Loader.shared.load();
+  });
 }
 
 document.addEventListener('click', startGame);

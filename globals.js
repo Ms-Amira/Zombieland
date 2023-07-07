@@ -1,0 +1,1 @@
+export const zombies = ['copzee', 'dogzee', 'femalezee', 'nursezee', 'quickzee', 'tankzee'];
