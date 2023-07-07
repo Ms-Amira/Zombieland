@@ -3,16 +3,18 @@ import Player from "./player.js";
 import Zombie from "./zombie.js";
 import Spawn from "./spawn.js";
 import { zombies } from "./globals.js";
-//import Matter from "matter-js";
 
-const canvasSize = 256;
+const canvasSize = 300;
 const canvas = document.getElementById("mycanvas");
 const app = new PIXI.Application({
   view: canvas,
   width: canvasSize,
   height: canvasSize,
-  backgroundColor: 0x5c812f
+  backgroundColor: 0x312a2b,
+  resolution: 2
 });
+
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 initGame();
 

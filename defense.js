@@ -19,12 +19,13 @@ shoot() {
     this.bullets = this.bullets.filter((b) => Math.abs(b.position.x) < this.app.screen.width && Math.abs(b.position.y) < this.app.screen.height);
     this.bullets.forEach((b) => this.app.stage.addChild(b));
 
-    const bullet = new PIXI.Graphics();
+    const bullet = new PIXI.Sprite(PIXI.Loader.shared.resources['bullet'].texture);
+    bullet.anchor.set(0.5);
+    bullet.scale.set(0.2);
     bullet.position.set(this.player.position.x, this.player.position.y);
-    bullet.beginFill(0x0000ff, 1);
-    bullet.drawCircle(0, 0, this.bulletRadius);
-    bullet.endFill();
-    let movement = this.player.player.rotation - Math.PI / 2;;
+        bullet.rotation = this.player.rotation;
+   
+    let movement = this.player.rotation - Math.PI / 2;
     bullet.velocity = new Victor(Math.cos(movement), Math.sin(movement)).multiplyScalar(this.bulletSpeed);
     this.bullets.push(bullet);
     this.app.stage.addChild(bullet);

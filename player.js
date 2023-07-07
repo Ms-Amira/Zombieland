@@ -6,11 +6,15 @@ export default class Player {
         this.app = app;
         const playerWidth = 32;
         let sheet = PIXI.Loader.shared.resources['assets/hero_male.json'].spritesheet
+
+        this.idle = new PIXI.AnimatedSprite(sheet.animations['idle']);
+        this.shoot = new PIXI.AnimatedSprite(sheet.animations['shoot']);
+
         this.player = new PIXI.AnimatedSprite(sheet.animations['idle']);
         this.player.animationSpeed = 0.1;
         this.player.play();
 // this.player = new PIXI.Sprite(PIXI.Texture.WHITE);
-this.player.anchor.set(0.5);
+this.player.anchor.set(0.5, 0.3);
 this.player.position.set(app.screen.width / 2, app.screen.height / 2);
 // this.player.width = this.player.height = playerWidth;
 // this.player.tint = 0xea985d;
@@ -56,9 +60,12 @@ this.app.stage.addChild(this.healthBar);
         let movement = Math.atan2(pointCursor.y - this.player.position.y, pointCursor.x - this.player.position.x
         ) +
             Math.PI / 2;
-        this.player.rotation = movement;
+        this.rotation = movement;
+        this.player.scale.x = pointCursor.x < this.player.position.x ? - 1 : 1;
 
         if (click.buttons !== this.lastClickButton) {
+            this.player.textures = click.buttons === 0 ? this.idle.textures : this.shoot.textures;
+            this.player.play();
             this.defense.shooting = click.buttons !== 0;
             this.lastClickButton = click.buttons;
         }
