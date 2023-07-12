@@ -9,8 +9,11 @@ export default class Defense {
     this.bullets = [];
     this.bulletRadius = 8;
     this.maxBullets = 3;
+    this.audio = new Audio('./assets/shoot.mp3');
 }
 shoot() {
+    this.audio.currentTime = 0;
+    this.audio.play();
     if (this.bullets.length >= this.maxBullets) {
         let b = this.bullets.shift();
         this.app.stage.removeChild(b);

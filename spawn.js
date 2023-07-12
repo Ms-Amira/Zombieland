@@ -1,3 +1,5 @@
+import GameState from "./game-state";
+
 export default class Spawn {
     constructor({app, create}) {
         this.app = app;
@@ -9,7 +11,7 @@ export default class Spawn {
     }
     
     spawns() {
-        if (this.app.gameStarted === false) return;
+        if (this.app.gameState !== GameState.RUNNING) return;
         if (this.spawnArr.length >= this.maxZombies) return;
         let s = this.create();
         this.spawnArr.push(s);

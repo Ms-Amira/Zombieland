@@ -13,11 +13,10 @@ export default class Player {
         this.player = new PIXI.AnimatedSprite(sheet.animations['idle']);
         this.player.animationSpeed = 0.1;
         this.player.play();
-// this.player = new PIXI.Sprite(PIXI.Texture.WHITE);
+
 this.player.anchor.set(0.5, 0.3);
 this.player.position.set(app.screen.width / 2, app.screen.height / 2);
-// this.player.width = this.player.height = playerWidth;
-// this.player.tint = 0xea985d;
+
 
 app.stage.addChild(this.player);
 
@@ -36,6 +35,13 @@ this.healthBar.zIndex = 1;
 this.app.stage.sortableChildren = true;
 this.app.stage.addChild(this.healthBar);
     }
+    
+set scale(s) {
+    this.player.scale.set(s);
+}
+get scale() {
+    return this.player.scale.x;
+}
 
     attack() {
         this.health -= 1;

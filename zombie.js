@@ -21,7 +21,8 @@ constructor({app, player}) {
     this.zombie.play();
     this.zombie.anchor.set(0.5);
     this.zombie.position.set(rando.x, rando.y);
-    app.stage.addChild(this.zombie)   
+    app.stage.addChild(this.zombie);
+    this.audio = new Audio('./assets/squelch.mp3')  
 }
 
 attackPlayer(){
@@ -47,12 +48,14 @@ update(delta) {
 }
 
 kill(){
+  this.audio.currentTime = 0;
+  this.audio.play();
   this.zombie.textures = this.die.textures;
   this.zombie.loop = false;
   this.zombie.onComplete = () => setTimeout(() => this.app.stage.removeChild(this.zombie), 3000);
   this.zombie.play();
-// this.app.stage.removeChild(this.zombie);
-clearInterval(this.interval);
+this.zombie.zIndex = - 1;
+  clearInterval(this.interval);
 }
 
 get position() {
